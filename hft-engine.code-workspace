@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/target": true,
+      "**/Cargo.lock": false
+    },
+    "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+    "rust-analyzer.checkOnSave.command": "clippy"
+  }
+}
