@@ -1,4 +1,4 @@
-use hft_engine::{MatchingEngine, Order, OrderBook, Side, Trade};
+use hft_engine::{ConcurrentEngine, MatchingEngine, Order, OrderBook, Side, Trade};
 
 fn order(id: u64, side: Side, price: u64, quantity: u32, timestamp: u64) -> Order {
     Order::new(id, side, price, quantity, timestamp)
@@ -108,4 +108,27 @@ fn cancel_removes_resting_order() {
     engine.process(order(1, Side::Buy, 100, 10, 1));
     assert!(engine.cancel(1).is_some());
     assert!(engine.book().best_bid().is_none());
+}
+
+#[test]
+fn concurrent_engine_processes_orders() {
+    let concurrent = ConcurrentEngine::new();
+    let sender = concurrent.order_sender();
+    let receiver = concurrent.trade_receiver();
+
+    sender
+        .send(order(1, Side::Sell, 100, 5, 1))
+        .expect("send order");
+    sender
+        .send(order(2, Side::Buy, 110, 5, 2))
+        .expect("send order");
+
+    let trade = receiver
+        .recv()
+        .expect("receive trade");
+
+    assert_eq!(trade.buy_order_id, 2);
+    assert_eq!(trade.sell_order_id, 1);
+    assert_eq!(trade.price, 100);
+    assert_eq!(trade.quantity, 5);
 }
