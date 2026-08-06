@@ -18,6 +18,18 @@ cd hft-engine
 cargo test
 ```
 
+Run the synthetic latency demo:
+
+```bash
+cargo run --example latency_demo
+```
+
+Run benchmark suites:
+
+```bash
+cargo bench
+```
+
 ## Future phases
 
-Planned future work includes synthetic benchmarking, concurrent ingestion, and a C++ port.
+Planned future work includes a C++ port and further concurrent ingestion paths.

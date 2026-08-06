@@ -111,6 +111,34 @@ fn cancel_removes_resting_order() {
 }
 
 #[test]
+fn order_generator_produces_alternating_sides_and_in_range_prices() {
+    let mut generator = hft_engine::OrderGenerator::new(100, 10, 123);
+
+    let first = generator.next().unwrap();
+    let second = generator.next().unwrap();
+
+    assert_eq!(first.id, 1);
+    assert_eq!(second.id, 2);
+    assert_ne!(first.side, second.side);
+    assert!(first.price >= 90 && first.price <= 110);
+    assert!(second.price >= 90 && second.price <= 110);
+}
+
+#[test]
+fn latency_recorder_computes_percentiles_and_throughput() {
+    use std::time::Duration;
+
+    let mut recorder = hft_engine::LatencyRecorder::new();
+    recorder.record(Duration::from_millis(10));
+    recorder.record(Duration::from_millis(20));
+    recorder.record(Duration::from_millis(30));
+
+    assert_eq!(recorder.p50(), Duration::from_millis(20));
+    assert_eq!(recorder.p99(), Duration::from_millis(30));
+    assert!(recorder.throughput_per_sec(Duration::from_secs(1)) > 0.0);
+}
+
+#[test]
 fn concurrent_engine_processes_orders() {
     let concurrent = ConcurrentEngine::new();
     let sender = concurrent.order_sender();
@@ -123,9 +151,7 @@ fn concurrent_engine_processes_orders() {
         .send(order(2, Side::Buy, 110, 5, 2))
         .expect("send order");
 
-    let trade = receiver
-        .recv()
-        .expect("receive trade");
+    let trade = receiver.recv().expect("receive trade");
 
     assert_eq!(trade.buy_order_id, 2);
     assert_eq!(trade.sell_order_id, 1);
