@@ -139,6 +139,21 @@ fn latency_recorder_computes_percentiles_and_throughput() {
 }
 
 #[test]
+fn spsc_ring_buffer_pushes_and_pops_in_order() {
+    use hft_engine::concurrent::SpscRingBuffer;
+
+    let buffer = SpscRingBuffer::new(8);
+    assert!(buffer.is_empty());
+
+    buffer.push(1).unwrap();
+    buffer.push(2).unwrap();
+    assert!(!buffer.is_empty());
+    assert_eq!(buffer.pop(), Some(1));
+    assert_eq!(buffer.pop(), Some(2));
+    assert!(buffer.is_empty());
+}
+
+#[test]
 fn concurrent_engine_processes_orders() {
     let concurrent = ConcurrentEngine::new();
     let sender = concurrent.order_sender();

@@ -24,6 +24,12 @@ Run the synthetic latency demo:
 cargo run --example latency_demo
 ```
 
+Run the ring-buffer demo:
+
+```bash
+cargo run --example ring_buffer_demo
+```
+
 Run benchmark suites:
 
 ```bash
