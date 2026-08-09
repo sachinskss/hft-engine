@@ -36,6 +36,15 @@ Run benchmark suites:
 cargo bench
 ```
 
+Run the C++ port demo and benchmark:
+
+```bash
+cd cpp
+make
+./bin/hft_engine_cpp
+./bin/hft_engine_cpp_bench
+```
+
 ## Future phases
 
 Planned future work includes a C++ port and further concurrent ingestion paths.

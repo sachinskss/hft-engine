@@ -1,8 +1,11 @@
 use std::thread;
 
-use crossbeam_channel::{unbounded, Receiver, Sender};
+use crossbeam_channel::{Receiver, Sender, unbounded};
 
-use crate::{engine::MatchingEngine, types::{Order, Trade}};
+use crate::{
+    engine::MatchingEngine,
+    types::{Order, Trade},
+};
 
 /// A simple concurrent engine pipeline that decouples order ingestion from matching.
 #[derive(Debug)]

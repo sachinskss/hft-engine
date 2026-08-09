@@ -37,14 +37,18 @@ fn main() {
                 let qty = 1 + (i % 4) as u32;
                 let ts = i as u64;
                 let order = Order::new(id, side, price, qty, ts);
-                if tx.send(order).is_err() { break; }
+                if tx.send(order).is_err() {
+                    break;
+                }
             }
         });
         prod_handles.push(handle);
     }
 
     drop(sender); // close main sender
-    for h in prod_handles { let _ = h.join(); }
+    for h in prod_handles {
+        let _ = h.join();
+    }
     let elapsed = Instant::now() - start;
     eprintln!("producers finished in {} ms", elapsed.as_millis());
 

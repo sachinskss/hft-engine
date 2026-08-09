@@ -1,15 +1,18 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -O2 -Wall -Wextra -Iinclude
 SRCS = $(wildcard src/*.cpp)
-OBJS = $(SRCS:src/%.cpp=build/%.o)
 BIN = bin/hft_engine_cpp
+BENCH = bin/hft_engine_cpp_bench
 
-all: $(BIN)
+all: $(BIN) $(BENCH)
 
-$(BIN): $(SRCS)
-	$(CXX) $(CXXFLAGS) -o $(BIN) $(SRCS)
+$(BIN): src/book.cpp src/engine.cpp src/main.cpp
+	$(CXX) $(CXXFLAGS) -o $(BIN) src/book.cpp src/engine.cpp src/main.cpp
+
+$(BENCH): src/book.cpp src/engine.cpp src/generator.cpp src/stats.cpp src/benchmark.cpp
+	$(CXX) $(CXXFLAGS) -o $(BENCH) src/book.cpp src/engine.cpp src/generator.cpp src/stats.cpp src/benchmark.cpp
 
 clean:
-	rm -rf build $(BIN)
+	rm -rf $(BIN) $(BENCH)
 
 .PHONY: all clean
