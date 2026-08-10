@@ -43,6 +43,7 @@ cd cpp
 make
 ./bin/hft_engine_cpp
 ./bin/hft_engine_cpp_bench
+./bin/hft_engine_cpp_spsc
 ```
 
 ## Future phases
