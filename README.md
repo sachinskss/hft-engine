@@ -36,6 +36,16 @@ Run benchmark suites:
 cargo bench
 ```
 
+Run the release comparison harness for the Rust hot path versus the C++ implementation:
+
+```bash
+# Bash / zsh
+./scripts/compare_release.sh
+
+# PowerShell
+./scripts/compare_release.ps1
+```
+
 Run the C++ port demo and benchmark:
 
 ```bash
